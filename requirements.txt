@@ -1,4 +1,5 @@
 cffi==1.14.4
-pkg-resources==0.0.0
+numpy==1.19.5
 pycparser==2.20
+scipy==1.6.0
 sounddevice==0.4.1
