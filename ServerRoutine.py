@@ -62,17 +62,19 @@ def audio():
         wav_header = genHeader(sampleRate, bitsPerSample, channels)
 
         first_run = True
-        with sd.InputStream(device=inputNum, samplerate=44100,
-              latency=0.1, dtype='int16', blocksize=2) as st:
-            while True:
-                newData, someBool = st.read(2)
-                newData = newData.tobytes()
-                if first_run:
-                    data = wav_header + newData
-                    first_run = False
-                else:
-                    data = newData
-                yield(data)
+        # with sd.InputStream(device=inputNum, samplerate=44100, latency=0.1, dtype='int16', blocksize=2) as st:
+        while True:
+            duration = 0.1  # seconds
+            myrecording = sd.rec(int(duration * sampleRate), samplerate=sampleRate, channels=2, dtype='int16')
+            sd.wait()
+            newData = myrecording.tobytes()
+            data = None
+            if first_run:
+                data = wav_header + newData
+                first_run = False
+            else:
+                data = newData
+            yield(data)
 
     return Response(sound())
 
